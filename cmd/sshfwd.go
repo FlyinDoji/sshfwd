@@ -22,8 +22,10 @@ func main() {
 	r := flag.String("r", "", "(required) Address and port of the remote endpoint")
 	user := flag.String("u", "", "(required)ssh username")
 	keyfile := flag.String("k", "", "path to ssh private key")
+	password := flag.String("pw", "", "password for ssh user")
 
 	flag.Parse()
+
 	splitAddr := func(addr string, host *string, port *int) {
 		var err error
 		v := strings.Split(addr, ":")
@@ -45,11 +47,20 @@ func main() {
 	splitAddr(*r, &remoteIp, &remotePort)
 	remote := sshfwd.Endpoint{Host: remoteIp, Port: remotePort}
 
-	cfg := sshfwd.TunnelConfig{
-		User:       *user,
-		Keyfile:    keyfile,
-		Passphrase: nil,
-		Timeout:    10 * time.Second,
+	var cfg sshfwd.TunnelConfig
+
+	if *keyfile == "" {
+		cfg = sshfwd.TunnelConfig{
+			User:     *user,
+			Password: password,
+			Timeout:  10 * time.Second,
+		}
+	} else {
+		cfg = sshfwd.TunnelConfig{
+			User:    *user,
+			Keyfile: keyfile,
+			Timeout: 10 * time.Second,
+		}
 	}
 
 	t := sshfwd.NewTunnel(local, proxy, remote, &cfg, nil)
