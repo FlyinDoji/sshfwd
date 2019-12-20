@@ -14,7 +14,6 @@ As a standalone executable
 sshfwd -l [local] -p [sshServer] -r [remote] -u [sshUser] -k (optional) [keyfile] -pw (optional) [ssh user password]
 ```
 
-
 As a library
 
 ``` 
