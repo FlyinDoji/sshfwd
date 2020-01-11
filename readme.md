@@ -2,6 +2,14 @@
 
 Forward traffic and connections between two remote endpoints via ssh tunnel.
 
+Inspired by 
+
+https://medium.com/elliotchance/how-to-create-an-ssh-tunnel-in-go-b63722d682aa
+
+Original implementation would leave connections hanging if the remote endpoint was not reachable.
+Added methods for shutting down the tunnel and awaiting for tunnel to be established.
+
+
 Supported authentication methods:
 1. Password
 2. Keypairs generated through OpenSSH with no passphrase
